@@ -40,10 +40,4 @@ jobs:
   
       - name: Evaluate the model
         run: |
-          if [[ $SCORE > 0.33 ]];
-          then
-            echo "Success: Score is greater than 0.33";
-          else
-            echo "Failure: Score is not greater than 0.33";
-            exit 1;
-          fi
+          if [[ `echo "$SCORE 0.33" | awk '{print ($1 < $2)}'` == 1 ]]; then echo "Insufficient Accuracy" && exit 1; fi
