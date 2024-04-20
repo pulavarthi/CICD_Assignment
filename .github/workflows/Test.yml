@@ -32,14 +32,11 @@ jobs:
           
       - name: Pull Docker image
         run: |
-          export TAG=$(git rev-parse --short HEAD)
-          docker pull sandeepdocks/cicd_asgn:$TAG
+          docker pull sandeepdocks/cicd_asgn:latest
      
       - name: Run Docker Container
         run: |
-          export TAG=$(git rev-parse --short HEAD)
-          export USER_NAME=${{ secrets.DOCKER_USERNAME }}
-          SCORE=$(docker run --rm $USER_NAME/cicd_asgn:$TAG)
+          SCORE=$(docker run --rm sandeepdocks/cicd_asgn:latest)
           echo "Score: $SCORE"
           export SCORE=$SCORE
   
