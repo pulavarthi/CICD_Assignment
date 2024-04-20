@@ -33,8 +33,8 @@ jobs:
     - name: Build Docker image
       run: |
         export TAG=$(git rev-parse --short HEAD)
-        docker build . -t CICD_asgn:$TAG
+        docker build . -t cicd_asgn:$TAG
 
     - name: Push Docker image
       run: |
-        docker push CICD_asgn:$TAG
+        docker push cicd_asgn:$TAG
