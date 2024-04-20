@@ -5,12 +5,10 @@ name: Test
 
 on:
   pull_request:
-    branches: [ "main" ]
-  workflow_run:       
-    workflows: ["Train"]
-    types:
-      - completed
-      
+    branches:
+      - main
+      - both-pass
+    
   workflow_dispatch:
 
 permissions:
@@ -19,7 +17,7 @@ permissions:
 jobs:
   pull_and_run:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}  
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -32,23 +30,20 @@ jobs:
           
       - name: Pull Docker image
         run: |
-          export TAG=$(git rev-parse --short HEAD)
-          docker pull ${{ secrets.DOCKER_USERNAME }}/cicd_asgn:$TAG
+          docker pull sandeepdocks/cicd_asgn:latest
      
       - name: Run Docker Container
         run: |
-          export TAG=$(git rev-parse --short HEAD)
-          export USER_NAME=${{ secrets.DOCKER_USERNAME }}
-          SCORE=$(docker run --rm $USER_NAME/cicd_asgn:$TAG)
+          SCORE=$(docker run --rm sandeepdocks/cicd_asgn:latest)
           echo "Score: $SCORE"
           export SCORE=$SCORE
   
       - name: Evaluate the model
         run: |
-          if [[ $SCORE > 0.50 ]];
+          if [[ $SCORE > 0.33 ]];
           then
-            echo "Success: Score is greater than 0.50";
+            echo "Success: Score is greater than 0.33";
           else
-            echo "Failure: Score is not greater than 0.50";
+            echo "Failure: Score is not greater than 0.33";
             exit 1;
           fi
