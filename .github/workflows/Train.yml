@@ -36,5 +36,5 @@ jobs:
 
     - name: Push Docker image
       run: |
-        docker tag cicd_asgn:$TAG sandeepdocks/cicd_asgn:latest
+        docker tag cicd_asgn:latest sandeepdocks/cicd_asgn:latest
         docker push sandeepdocks/cicd_asgn:latest
