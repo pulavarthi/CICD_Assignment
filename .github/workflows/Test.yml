@@ -37,7 +37,9 @@ jobs:
      
       - name: Run Docker Container
         run: |
-          SCORE=$(docker run --rm ${{ secrets.DOCKER_USERNAME }}/cicd_asgn:$TAG)
+          export TAG=$(git rev-parse --short HEAD)
+          export USER_NAME=${{ secrets.DOCKER_USERNAME }}
+          SCORE=$(docker run --rm $USER_NAME/cicd_asgn:$TAG)
           echo "Score: $SCORE"
   
       - name: Evaluate the model
