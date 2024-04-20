@@ -8,13 +8,13 @@ WORKDIR /code
 COPY . /code
 
 #Installing the required packages
-RUN pip -m install --upgrade -r /code/requirements.txt
+RUN pip -m install -r requirements.txt
 
 #Exposing the port 80
 EXPOSE 80
 
 #Running the train.py file during building phase
-RUN python /code/train.py
+RUN python train.py
 
 #Command instruction to run when the container starts
-CMD ["python", "/code/test.py"]
+CMD ["python", "test.py"]
