@@ -49,9 +49,7 @@ jobs:
           {
             echo "Success: Score is greater than 0.50"
             echo "{passed}={true}" >> $GITHUB_OUTPUT
-          }
-          else
-          {
+          } else {
             echo "Failure: Score is not greater than 0.50"
             echo "{passed}={false}" >> $GITHUB_OUTPUT
             exit 1
