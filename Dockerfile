@@ -8,7 +8,7 @@ WORKDIR /code
 COPY . /code
 
 #Installing the required packages
-RUN pip -m install -r requirements.txt
+RUN pip install -r requirements.txt
 
 #Exposing the port 80
 EXPOSE 80
