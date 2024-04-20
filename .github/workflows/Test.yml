@@ -1,0 +1,52 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: Test
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  workflow_run:       
+    workflows: ["Train"]
+    types:
+      - completed
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pull_and_run:
+    runs-on: ubuntu-latest
+    needs: Train
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Login to docker registry
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        
+    - name: Pull Docker image
+      run: |
+        export TAG=$(git rev-parse --short HEAD)
+        docker pull ${{ secrets.DOCKER_USERNAME }}/cicd_asgn:$TAG
+   
+    - name: Run Docker Container
+      run: |
+        SCORE=$(docker run --rm ${{ secrets.DOCKER_USERNAME }}/cicd_asgn:$TAG)
+        echo "Score: $SCORE"
+
+    - name: Evaluate the model
+      run: |
+        if (( $(echo "$SCORE > 0.35" | bc -l) )); then
+          echo "Success: Score is greater than 0.35"
+          echo "::set-output name=passed::true"
+        else
+          echo "Failure: Score is not greater than 0.35"
+          echo "::set-output name=passed::false"
+          exit 1
+        fi
