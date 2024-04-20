@@ -41,14 +41,14 @@ jobs:
           export USER_NAME=${{ secrets.DOCKER_USERNAME }}
           SCORE=$(docker run --rm $USER_NAME/cicd_asgn:$TAG)
           echo "Score: $SCORE"
+          export SCORE=$SCORE
   
       - name: Evaluate the model
         run: |
-          if (( $(echo "$SCORE > 0.30" | bc -l) )); then
-            echo "Success: Score is greater than 0.30"
-            echo "{passed}={true}" >> $GITHUB_OUTPUT
+          if [[ $SCORE > 0.50 ]];
+          then
+            echo "Success: Score is greater than 0.50";
           else
-            echo "Failure: Score is not greater than 0.30"
-            echo "{passed}={false}" >> $GITHUB_OUTPUT
-            exit 1
+            echo "Failure: Score is not greater than 0.50";
+            exit 1;
           fi
