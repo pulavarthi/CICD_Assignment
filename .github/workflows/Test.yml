@@ -4,11 +4,11 @@
 name: Test
 
 on:
-  workflow_run:       
-    workflows: ["Train"]
-    types:
-      - completed
-      
+  pull_request:
+    branches:
+      - main
+      - both-pass
+    
   workflow_dispatch:
 
 permissions:
