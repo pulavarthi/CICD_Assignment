@@ -37,4 +37,5 @@ jobs:
 
     - name: Push Docker image
       run: |
+        export TAG=$(git rev-parse --short HEAD)
         docker push cicd_asgn:$TAG
