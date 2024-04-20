@@ -38,4 +38,5 @@ jobs:
     - name: Push Docker image
       run: |
         export TAG=$(git rev-parse --short HEAD)
-        docker push cicd_asgn:$TAG
+        docker tag cicd_asgn:$TAG ${{ secrets.DOCKER_USERNAME }}/cicd_asgn:$TAG
+        docker push ${{ secrets.DOCKER_USERNAME }}/cicd_asgn:$TAG
